@@ -21,21 +21,24 @@ var isChrome = !!window.chrome && !!window.chrome.webstore;
 // Init voices array
 let voices = [];
 
-const getVoices = () => {
+function populateVoiceList() {
   voices = synth.getVoices();
 
   // Loop through voices and create an option for each one
-  voices.forEach(voice => {
+  for(i = 0; i < voices.length ; i++) {
     // Create option element
-    const option = document.createElement('option');
+    var option = document.createElement('option');
     // Fill option with voice and language
-    option.textContent = voice.name + '(' + voice.lang + ')';
-
+    option.textContent = voices[i].name + ' (' + voices[i].lang + ')';
+    
+    if(voices[i].default) {
+      option.textContent += ' -- DEFAULT';
+    }
     // Set needed option attributes
-    option.setAttribute('data-lang', voice.lang);
-    option.setAttribute('data-name', voice.name);
+    option.setAttribute('data-lang', voices[i].lang);
+    option.setAttribute('data-name', voices[i].name);
     voiceSelect.appendChild(option);
-  });
+  }
 };
 
 //Line 35, 36 causes voice list duplication
@@ -46,12 +49,17 @@ if (synth.onvoiceschanged !== undefined) {
 
 //Fix for duplication, run code depending on the browser
 if (isFirefox) {
-    getVoices();
+  populateVoiceList();
 }
 if (isChrome) {
     if (synth.onvoiceschanged !== undefined) {
         synth.onvoiceschanged = getVoices;
     }
+}
+
+populateVoiceList();
+if (speechSynthesis.onvoiceschanged !== undefined) {
+  speechSynthesis.onvoiceschanged = populateVoiceList;
 }
 
 // Speak
