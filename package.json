@@ -1,6 +1,6 @@
 {
   "name": "Text To Speech",
-  "homepage": "Text-to-Speech",
+  "homepage": "https://rudreshnarwal.github.io/Text-To-Speech-Synthesis-App/",
   "version": "1.0.0",
   "description": "Text to speak and synthesis app using the web speech API",
   "main": "index.js",
